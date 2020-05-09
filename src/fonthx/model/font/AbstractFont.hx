@@ -24,6 +24,7 @@ class AbstractFont implements IFont {
     public var postscriptName(get, null):String;
     public var trademark(get, null):String;
     public var manufacturerURL(get, null):String;
+    public var vendorID(get, null):String;
     public var vendorURL(get, null):String;
     public var URL(get, null):String;
     public var license(get, null):String;
@@ -140,6 +141,10 @@ class AbstractFont implements IFont {
 
     function set_manufacturerURL(value:String) {
         return this.manufacturerURL = value;
+    }
+
+    function get_vendorID():String {
+        return "FSTR";
     }
 
     function get_vendorURL():String {
