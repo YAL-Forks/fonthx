@@ -255,6 +255,10 @@ class AbstractFont implements IFont {
         return 0;
     }
 
+    public function isMonospaced():Bool {
+        return false;
+    }
+
     public function hasKerning():Bool {
         return getKerningPairs() != null && getKerningPairs().length > 0;
     }

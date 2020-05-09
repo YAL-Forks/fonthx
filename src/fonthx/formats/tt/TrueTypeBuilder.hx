@@ -410,7 +410,7 @@ class TrueTypeBuilder {
     private static function createPostTable(font:IFont):PostTable {
         var table = new PostTable(PostTable.VERSION_3_0);
         table
-            .setMonospaced(false)
+            .setMonospaced(font.isMonospaced())
             .setItalicAngle(0, 0)
             .setUnderlinePosition(Std.int(font.emSquare / 10))
             .setUnderlineThickness(Std.int(font.emSquare / 20))

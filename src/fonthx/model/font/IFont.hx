@@ -41,6 +41,7 @@ interface IFont {
 
     function getGlyphForCodepoint(cp:Int):IContourGlyph;
 
+    function isMonospaced():Bool;
     function getLineGap():Int;
     function getNumberOfHMetrics():Int;
 
