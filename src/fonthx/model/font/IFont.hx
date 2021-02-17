@@ -1,7 +1,11 @@
 package fonthx.model.font;
 
+import fonthx.model.font.features.Layout;
+import fonthx.model.font.features.Script;
+import fonthx.model.font.features.FeatureTag;
+import fonthx.model.font.features.Feature;
 import haxe.ds.IntMap;
-import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 
 /**
 * Interface to implement for a fonthx Font,
@@ -26,7 +30,7 @@ interface IFont {
     var postscriptName(get, null):String;
     var trademark(get, null):String;
     var manufacturerURL(get, null):String;
-	var vendorID(get, null):String;
+    var vendorID(get, null):String;
     var vendorURL(get, null):String;
     var URL(get, null):String;
     var license(get, null):String;
@@ -40,14 +44,15 @@ interface IFont {
     var realDescender(get, null):Float;
     var typoLineGap(get, null):Float;
 
-    function getGlyphForCodepoint(cp:Int):IContourGlyph;
+    var layout(get, null):Layout;
 
     function isMonospaced():Bool;
     function getLineGap():Int;
+    function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getNumberOfHMetrics():Int;
 
     function hasKerning():Bool;
-    function getKerningPairs():Array<KerningPair>;
+    function getKerningPairs():Array<PositioningPair>;
 
 
 }

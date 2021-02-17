@@ -1,6 +1,6 @@
 package fonthx.formats.tt.tables;
 
-import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 
 /**
@@ -10,10 +10,10 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
 class KerningTable extends Table
 {
 	// members
-	private var pairs:Array<KerningPair>;
+	private var pairs:Array<PositioningPair>;
 
 	/**
-	 * Contstruct a new HorizontalMetricsTable
+	 * Contstruct a new KernTable
 	 */
 	public function new() {
 		super(Table.KERN);
@@ -61,8 +61,8 @@ class KerningTable extends Table
 		// need to sort our pairs
 		// The left and right halves of the kerning pair make an unsigned 32-bit number, which is then used to order the kerning pairs numerically.
         pairs.sort(function (kp1, kp2) {
-		    	var id1 = kp1.left << 8 | kp1.right;
-		    	var id2 = kp2.left << 8 | kp2.right;
+		    	var id1 = kp1.idx1 << 8 | kp1.idx2;
+		    	var id2 = kp2.idx1 << 8 | kp2.idx2;
 		    	if (id2 == id1) {
 		    		return 0;
 		    	} else if (id2 > id1) {
@@ -71,13 +71,13 @@ class KerningTable extends Table
 		    	return 1;
 		      });
 		for (kp in pairs) {
-			tt.writeUSHORT(kp.left);
-			tt.writeUSHORT(kp.right);
-			tt.writeSHORT(Std.int(kp.value)); // fixme ROUNDING
+			tt.writeUSHORT(kp.idx1);
+			tt.writeUSHORT(kp.idx2);
+			tt.writeSHORT(Std.int(kp.x)); // fixme ROUNDING
 		}
 	}
 
-	public function setKerningPairs(pairs:Array<KerningPair>) {
+	public function setKerningPairs(pairs:Array<PositioningPair>) {
 		this.pairs = pairs;
 	}
 

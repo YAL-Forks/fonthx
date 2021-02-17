@@ -1,5 +1,7 @@
 package fonthx.formats.tt;
 
+import fonthx.model.font.features.FeatureTag;
+import fonthx.formats.tt.tables.opentype.GPOSTable;
 import haxe.Int64;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
@@ -67,6 +69,7 @@ class TrueTypeBuilder {
 
         if (font.hasKerning()) {
             ttf.addTable(createKerningTable(font));
+            ttf.addTable(createGPOSTable(font));
         }
 
         ttf.addTable(createMaximumProfileTable(font));
@@ -207,14 +210,14 @@ class TrueTypeBuilder {
         return cmap;
     }
 
-    private static function createHorizontalHeaderTable(fnt:IFont):HorizontalHeaderTable {
+    private static function createHorizontalHeaderTable(font:IFont):HorizontalHeaderTable {
         var table = new HorizontalHeaderTable();
         var minLSB = MathUtils.MAX_INT;
         var minRSB = MathUtils.MAX_INT;
         var maxAdvancedWidth = 0;
         var xMaxExtent = 0;
         var b:Rectangle;
-        for (glyph in fnt.glyphs) {
+        for (glyph in font.glyphs) {
             if (glyph.numContours <= 0) {
                 continue;
             }
@@ -236,15 +239,15 @@ class TrueTypeBuilder {
         }
         table
             .setAdvanceWidthMax(maxAdvancedWidth)
-            .setAscender(Std.int(fnt.realAscender))
+            .setAscender(Std.int(font.realAscender))
             .setCaretOffset(0)
             .setCaretSlopeRise(1)
             .setCaretSlopeRun(0)
-            .setDescender(Std.int(fnt.realDescender))
-            .setLineGap(fnt.getLineGap())
+            .setDescender(Std.int(font.realDescender))
+            .setLineGap(font.getLineGap())
             .setMinLeftSideBearing(minLSB)
             .setMinRightSideBearing(minRSB)
-            .setNumberOfHMetrics(fnt.getNumberOfHMetrics())
+            .setNumberOfHMetrics(font.getNumberOfHMetrics())
             .setXMaxExtent(xMaxExtent)
         ;
         return table;
@@ -421,6 +424,12 @@ class TrueTypeBuilder {
     private static function createKerningTable(font:IFont):KerningTable {
         var table = new KerningTable();
         table.setKerningPairs(font.getKerningPairs());
+        return table;
+    }
+
+    private static function createGPOSTable(font:IFont):GPOSTable {
+        var table = new GPOSTable();
+        table.setLayout(font.layout);
         return table;
     }
 
