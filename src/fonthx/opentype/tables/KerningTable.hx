@@ -60,16 +60,13 @@ class KerningTable extends Table
 
 		// need to sort our pairs
 		// The left and right halves of the kerning pair make an unsigned 32-bit number, which is then used to order the kerning pairs numerically.
-        pairs.sort(function (kp1, kp2) {
-		    	var id1 = kp1.idx1 << 8 | kp1.idx2;
-		    	var id2 = kp2.idx1 << 8 | kp2.idx2;
-		    	if (id2 == id1) {
-		    		return 0;
-		    	} else if (id2 > id1) {
-		    		return -1;
-		    	}
-		    	return 1;
-		      });
+		pairs.sort(function (kp1, kp2) {
+			var diff = kp1.idx1 - kp2.idx1;
+			if (diff != 0) return diff > 0 ? 1 : -1;
+			diff = kp1.idx2 - kp2.idx2;
+			if (diff != 0) return diff > 0 ? 1 : -1;
+			return 0;
+		});
 		for (kp in pairs) {
 			tt.writeUSHORT(kp.idx1);
 			tt.writeUSHORT(kp.idx2);
